@@ -25,7 +25,7 @@ public class UserController {
 
     @PostMapping("/api/user/create")
     public ResponseEntity<UserM> createUser(@RequestBody UserM user) {
-        UserM createdUser = userService.createUser(user.getUserName(), user.getUserEmail(), user.getUserImageUrl(), user.getHashedPassword());
+        UserM createdUser = userService.createUser(user.getUserName(), user.getUserEmail(), user.getUserImageUrl(), user.getHashedPassword()); // TODO: Fix separate "password" and "hashedPassword"
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
