@@ -16,18 +16,18 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-@Value("${App.Url}")
-private String base_url;
+    @Value("${App.Url}")
+    private String base_url;
 
-@Autowired
-UserServiceImpl userService;
+    @Autowired
+    UserServiceImpl userService;
 
 
-@GetMapping("localhost:8080/user/{id}")
-public ResponseEntity<UserM> findById(@PathVariable Long id){
-    UserM userM = userService.getUserById(id);
-    return new ResponseEntity<>(userM, HttpStatus.OK);
-}
+    @GetMapping("localhost:8080/user/{id}")
+    public ResponseEntity<UserM> findById(@PathVariable Long id) {
+        UserM userM = userService.getUserById(id);
+        return new ResponseEntity<>(userM, HttpStatus.OK);
+    }
 
 
 }

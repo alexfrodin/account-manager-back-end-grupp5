@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
-@Autowired
-private UserDao userDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public UserM getUserById(Long id) {
-     return userDao.findById(id).orElseThrow();
+        return userDao.findById(id).orElseThrow();
     }
 }
