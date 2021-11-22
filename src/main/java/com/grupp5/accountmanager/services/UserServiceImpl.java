@@ -15,4 +15,11 @@ public class UserServiceImpl implements UserService {
     public UserM getUserById(Long id) {
         return userDao.findById(id).orElseThrow();
     }
+
+    @Override
+    public UserM createUser(String userName, String userEmail, String userImageUrl, String password) {
+        UserM newUser = new UserM(userName, userEmail, userImageUrl, password);
+        userDao.save(newUser);
+        return newUser;
+    }
 }

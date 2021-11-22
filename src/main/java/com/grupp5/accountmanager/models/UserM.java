@@ -1,19 +1,35 @@
 package com.grupp5.accountmanager.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class UserM {
-    @Id
-    private long Id;
 
+    @Id
+    @GeneratedValue
+    private long Id;
+    
+    @Column(name="USER_NAME")
+    private String userName;
+    @Column(name="USER_EMAIL")
+    private String userEmail;
+    @Column(name="USER_IMAGE_URL")
+    private String userImageUrl;
+    @Column(name="PASSWORD")
     private String hashedPassword;
 
-    private String userName;
-    private String userEmail;
-    private String userImageUrl;
+    public UserM() {
+    }
 
+    public UserM(String hashedPassword, String userName, String userEmail, String userImageUrl) {
+        this.hashedPassword = hashedPassword;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userImageUrl = userImageUrl;
+    }
 
     public long getId() {
         return Id;
