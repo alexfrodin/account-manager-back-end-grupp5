@@ -5,9 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
-
 public interface UserService {
 
 
-public UserM getUserById(Long id);
+    public UserM getUserById(Long id);
 }

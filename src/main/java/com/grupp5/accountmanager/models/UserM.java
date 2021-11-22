@@ -5,14 +5,14 @@ import javax.persistence.Id;
 
 @Entity
 public class UserM {
-@Id
-private long Id;
+    @Id
+    private long Id;
 
-private String hashedPassword;
+    private String hashedPassword;
 
-private String userName;
-private String userEmail;
-private String userImageUrl;
+    private String userName;
+    private String userEmail;
+    private String userImageUrl;
 
 
     public long getId() {
