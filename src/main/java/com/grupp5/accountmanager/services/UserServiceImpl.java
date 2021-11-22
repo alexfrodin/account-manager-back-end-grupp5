@@ -3,10 +3,7 @@ package com.grupp5.accountmanager.services;
 import com.grupp5.accountmanager.dao.UserDao;
 import com.grupp5.accountmanager.models.UserM;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
