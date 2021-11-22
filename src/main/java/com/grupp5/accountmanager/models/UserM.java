@@ -1,4 +1,4 @@
-package com.grupp5.models;
+package com.grupp5.accountmanager.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
