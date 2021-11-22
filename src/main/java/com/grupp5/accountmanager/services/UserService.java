@@ -4,8 +4,8 @@ import com.grupp5.accountmanager.models.UserM;
 
 public interface UserService {
 
-    public UserM getUserById(Long id);
+    UserM getUserById(Long id);
 
-    public UserM createUser(String userName, String userEmail, String userImageUrl, String password);
+    UserM createUser(UserM user);
 
 }
