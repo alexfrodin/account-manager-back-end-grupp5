@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private static final String APPLICATION_JSON_VALUE = "application/json";
     private final AuthenticationManager authenticationManager;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -43,7 +44,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         // super.successfulAuthentication(request, response, chain, authResult);
 
-        User user = (User)authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes()); // TODO: Replace secret in env
         String access_token = JWT.create() // Creates access_token
                 .withSubject(user.getUsername()) // Contains username
@@ -60,6 +61,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         response.setHeader("access_token", access_token);
         response.setHeader("refresh_token", refresh_token);
+        response.setContentType(APPLICATION_JSON_VALUE);
+
+
     }
 
     @Override // TODO: Add brute-force controll
