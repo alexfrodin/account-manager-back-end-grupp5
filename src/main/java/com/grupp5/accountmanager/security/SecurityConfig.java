@@ -1,7 +1,6 @@
 package com.grupp5.accountmanager.security;
 
 import com.grupp5.accountmanager.filter.CustomAuthenticationFilter;
-import com.grupp5.accountmanager.services.UserService;
 import com.grupp5.accountmanager.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
