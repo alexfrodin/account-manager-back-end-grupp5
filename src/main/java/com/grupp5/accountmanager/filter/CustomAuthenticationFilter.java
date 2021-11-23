@@ -2,6 +2,7 @@ package com.grupp5.accountmanager.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -59,10 +62,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
-        response.setHeader("access_token", access_token);
-        response.setHeader("refresh_token", refresh_token);
+        // response.setHeader("access_token", access_token);
+        // response.setHeader("refresh_token", refresh_token);
+
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("access_token", access_token);
+        tokens.put("refresh_token", refresh_token);
+        tokens.put("roles", user.getAuthorities().toString());
         response.setContentType(APPLICATION_JSON_VALUE);
 
+        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
     }
 
