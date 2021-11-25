@@ -2,6 +2,7 @@ package com.grupp5.accountmanager.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -34,8 +37,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String userEmail = request.getParameter("useremail");
         String password = request.getParameter("password");
-        System.out.println("UserEmail: " + userEmail);
-        System.out.println("UserPass: " + password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEmail, password);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -50,7 +51,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withSubject(user.getUsername()) // Contains username
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
+                .withClaim("role", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create() // Refresh token to gain new access_token
@@ -59,10 +60,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
-        response.setHeader("access_token", access_token);
-        response.setHeader("refresh_token", refresh_token);
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("access_token", access_token);
+        tokens.put("refresh_token", refresh_token);
+        tokens.put("role", user.getAuthorities().toString().substring(1, user.getAuthorities().toString().length() - 1));
         response.setContentType(APPLICATION_JSON_VALUE);
 
+        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
     }
 
