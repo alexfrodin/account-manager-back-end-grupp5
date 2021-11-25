@@ -37,8 +37,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String userEmail = request.getParameter("useremail");
         String password = request.getParameter("password");
-        System.out.println("UserEmail: " + userEmail);
-        System.out.println("UserPass: " + password);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEmail, password);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -53,7 +51,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withSubject(user.getUsername()) // Contains username
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
+                .withClaim("role", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create() // Refresh token to gain new access_token
@@ -62,13 +60,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
-        // response.setHeader("access_token", access_token);
-        // response.setHeader("refresh_token", refresh_token);
-
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
-        tokens.put("roles", user.getAuthorities().toString());
+        tokens.put("role", user.getAuthorities().toString().substring(1, user.getAuthorities().toString().length() - 1));
         response.setContentType(APPLICATION_JSON_VALUE);
 
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
