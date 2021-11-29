@@ -22,8 +22,9 @@ public class UserController {
     public ResponseEntity<UserM> findById(@PathVariable Long id) {
         UserM userM = userService.getUserById(id);
         return new ResponseEntity<>(userM, HttpStatus.OK);
-    }
+}
 
+    // @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/user/create")
     public ResponseEntity<UserM> createUser(@RequestBody UserM user) {
         UserM createdUser = userService.createUser(user);
