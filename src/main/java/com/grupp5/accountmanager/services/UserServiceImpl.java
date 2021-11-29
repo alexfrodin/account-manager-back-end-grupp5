@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -43,7 +44,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<UserM> getAllUsers() {
-        return null;
+        List<UserM> userMList = new LinkedList<>();
+        userDao.findAll().forEach(userMList::add);
+        System.out.println(userMList);
+        return userMList;
     }
 
     @Override

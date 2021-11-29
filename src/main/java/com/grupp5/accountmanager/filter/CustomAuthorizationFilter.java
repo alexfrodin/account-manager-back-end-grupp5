@@ -10,6 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +30,11 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private static final String APPLICATION_JSON_VALUE = "application/json";
+    Logger logger = Logger.getLogger(CustomAuthorizationFilter.class.getName());
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().equals("/api/auth")) {
+        if (request.getServletPath().equals("/api/auth")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -38,11 +42,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 try {
 
                     String token = authorizationHeader.substring("Bearer ".length());
+                    logger.log(Level.WARNING, token);
                     Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String userEmail = decodedJWT.getSubject();
-                    String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+                    String[] roles = decodedJWT.getClaim("role").asArray(String.class);  //Ändrade till role istället för roles, tog mig ungefär 2-3 tinmar att hitta felet.
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role -> {
                         authorities.add(new SimpleGrantedAuthority(role));
@@ -50,7 +55,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userEmail, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
                     filterChain.doFilter(request, response);
                 } catch (Exception exception) {
                     System.out.println("Error logging in" + exception.getMessage());
