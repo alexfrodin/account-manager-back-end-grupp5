@@ -19,11 +19,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static java.util.stream.Collectors.toList;
 
-public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private final static Logger LOGGER = Logger.getLogger(CustomAuthenticationFilter.class.getName());
     private static final String APPLICATION_JSON_VALUE = "application/json";
     private final AuthenticationManager authenticationManager;
 
