@@ -14,6 +14,10 @@ public class FileEntity {
     private Long size;
     private String contentType;
 
+    @OneToOne
+    @JoinColumn(name="user_id")
+    private UserM uploader;
+
     @Lob
     private byte[] data;
 

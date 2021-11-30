@@ -8,6 +8,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +39,20 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public Iterable<FileEntity> getAllFiles() {
-        return fileDao.findAll();
+    public HashMap<String, List> getFileList() {
+        HashMap<String, List> files = new HashMap<>();
+        List<Object> file = new ArrayList<>();
+
+        fileDao.findAll().forEach(f -> {
+            FileEntity fileEntity = new FileEntity();
+            fileEntity.setName(f.getName());
+            fileEntity.setContentType(f.getContentType());
+            fileEntity.setId(f.getId());
+            fileEntity.setSize(f.getSize());
+            file.add(fileEntity);
+        });
+        files.put("files", file);
+
+        return files;
     }
 }
