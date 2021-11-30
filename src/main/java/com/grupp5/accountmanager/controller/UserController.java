@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class UserController {
 
@@ -22,13 +24,25 @@ public class UserController {
     public ResponseEntity<UserM> findById(@PathVariable Long id) {
         UserM userM = userService.getUserById(id);
         return new ResponseEntity<>(userM, HttpStatus.OK);
-}
+    }
 
-    // @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/user/create")
     public ResponseEntity<UserM> createUser(@RequestBody UserM user) {
         UserM createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/api/user/getAll")
+    public ResponseEntity<List<UserM>> getAllUsers() {
+        List<UserM> users = null;
+        try {
+            users = userService.getAllUsers();
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 

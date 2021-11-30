@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -38,6 +41,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUserEmail(), user.getHashedPassword(), authorities);
     }
 
+
+    @Override
+    public List<UserM> getAllUsers() {
+        List<UserM> userMList = new LinkedList<>();
+        userDao.findAll().forEach(userMList::add);
+        System.out.println(userMList);
+        return userMList;
+    }
+
     @Override
     public UserM getUserById(Long id) {
         return userDao.findById(id).orElseThrow();
@@ -49,5 +61,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setHashedPassword(passwordEncoder.encode(password));
         userDao.save(user);
         return user;
+    }
+
+    @Override
+    public UserM addOrUpdateUser(UserM userM) {
+        return null;
+    }
+
+    @Override
+    public UserM deleteUser(int id) throws Exception {
+        return null;
     }
 }
