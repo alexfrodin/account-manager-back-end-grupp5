@@ -18,6 +18,14 @@ public class FileEntity {
     @JoinColumn(name="user_id")
     private UserM uploader;
 
+    public UserM getUploader() {
+        return uploader;
+    }
+
+    public void setUploader(UserM uploader) {
+        this.uploader = uploader;
+    }
+
     @Lob
     private byte[] data;
 
