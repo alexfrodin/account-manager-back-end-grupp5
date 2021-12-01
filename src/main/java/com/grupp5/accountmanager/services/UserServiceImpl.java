@@ -2,6 +2,7 @@ package com.grupp5.accountmanager.services;
 
 import com.grupp5.accountmanager.dao.UserDao;
 import com.grupp5.accountmanager.exceptions.EntityNotFoundException;
+import com.grupp5.accountmanager.exceptions.NonUniqueResultException;
 import com.grupp5.accountmanager.models.UserM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,10 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -28,8 +26,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserM user = userDao.findByUserEmail(email);
-        if (user == null) {
+        Optional<UserM> user = userDao.findByUserEmail(email);
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found in the database");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>(); // TODO: Fix roles in DB
@@ -39,7 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         // Prepared code for roles:
         // user.getRoles().forEach(role -> { authorities.add(new SimpleGrantedAuthority(role)) });
 
-        return new org.springframework.security.core.userdetails.User(user.getUserEmail(), user.getHashedPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.get().getUserEmail(), user.get().getHashedPassword(), authorities);
     }
 
 
@@ -58,6 +56,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserM createUser(UserM user) {
+        Optional<UserM> userM = userDao.findByUserEmail(user.getUserEmail());
+        if (userM.isPresent()) {
+            throw new NonUniqueResultException(user.getId());
+        }
         String password = user.getHashedPassword();
         user.setHashedPassword(passwordEncoder.encode(password));
         userDao.save(user);
@@ -65,16 +67,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserM updateUser(UserM user) {
-        UserM userM = userDao.findById(user.getId()).get();
-        if(userM==null){
-         throw new EntityNotFoundException(user.getId());
+    public UserM updateUser(Long id, UserM user) {
+
+        Optional<UserM> userM = userDao.findById(id);
+
+        if (!userM.isPresent()) {
+            throw new EntityNotFoundException(user.getId());
         }
+
         return userDao.save(user);
     }
 
     @Override
-    public UserM deleteUser(int id) throws Exception {
-        return null;
+    public UserM deleteUser(Long id) {
+        Optional<UserM> userM = userDao.findById(id);
+        if (!userM.isPresent()) {
+            throw new EntityNotFoundException(id);
+        }
+        userDao.deleteById(id);
+        return userM.get();
     }
 }
