@@ -3,7 +3,7 @@ package com.grupp5.accountmanager.services;
 import com.grupp5.accountmanager.dao.AnimalDao;
 import com.grupp5.accountmanager.models.Animal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.util.BsonUtils;
+// import org.springframework.data.mongodb.util.BsonUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

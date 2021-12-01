@@ -7,13 +7,23 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Controller
 public class SocketController {
-    @MessageMapping("/user-all")
+    Logger logger = Logger.getLogger(SocketController.class.getName());
+    @MessageMapping("/ws-chat")
     @SendTo("/topic/user")
-    public MessageBean sendToAll(@Payload MessageBean message){
+    public MessageBean sendToAll(MessageBean message) throws Exception{
+
+        try{
+        logger.log(Level.WARNING, message.getMessage());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return message;
     }
 
