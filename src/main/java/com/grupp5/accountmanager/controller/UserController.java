@@ -26,6 +26,12 @@ public class UserController {
         return new ResponseEntity<>(userM, HttpStatus.OK);
     }
 
+    @PutMapping("/api/user/update/{id}")
+    public ResponseEntity<UserM> updateById(@PathVariable Long id, @RequestBody UserM user){
+        UserM userM = userService.updateUser(id,user);
+        return new ResponseEntity<>(userM,HttpStatus.CREATED);
+    }
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/user/create")
     public ResponseEntity<UserM> createUser(@RequestBody UserM user) {
@@ -43,6 +49,11 @@ public class UserController {
             ex.getMessage();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+    @DeleteMapping("/api/user/delete/{id}")
+    public ResponseEntity<UserM> deleteUserById(@PathVariable Long id){
+      UserM userM = userService.deleteUser(id);
+      return new ResponseEntity<>(userM,HttpStatus.OK);
     }
 
 
