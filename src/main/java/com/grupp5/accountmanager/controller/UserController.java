@@ -26,6 +26,12 @@ public class UserController {
         return new ResponseEntity<>(userM, HttpStatus.OK);
     }
 
+    @PutMapping("/api/user/update/{id}")
+    public ResponseEntity<UserM> updateById(@PathVariable Long id){
+        
+        return null;
+    }
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/user/create")
     public ResponseEntity<UserM> createUser(@RequestBody UserM user) {

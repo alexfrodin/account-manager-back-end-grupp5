@@ -1,6 +1,7 @@
 package com.grupp5.accountmanager.services;
 
 import com.grupp5.accountmanager.dao.UserDao;
+import com.grupp5.accountmanager.exceptions.EntityNotFoundException;
 import com.grupp5.accountmanager.models.UserM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserM user = userDao.findByUserEmail(email);
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("User not found in the database");
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>(); // TODO: Fix roles in DB
@@ -64,8 +65,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserM addOrUpdateUser(UserM userM) {
-        return null;
+    public UserM updateUser(UserM user) {
+        UserM userM = userDao.findById(user.getId()).get();
+        if(userM==null){
+         throw new EntityNotFoundException(user.getId());
+        }
+        return userDao.save(user);
     }
 
     @Override
