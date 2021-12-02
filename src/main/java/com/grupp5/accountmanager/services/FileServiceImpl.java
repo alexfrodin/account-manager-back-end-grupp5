@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -26,21 +27,21 @@ public class FileServiceImpl implements FileService{
         this.userDao = userDao;
     }
 
-    private UserM getUserByEmail(String userEmail) {
+    private Optional<UserM> getUserByEmail(String userEmail) {
         return userDao.findByUserEmail(userEmail);
     }
 
     @Override
     public void save(MultipartFile file, String userEmail) throws IOException {
 
-        UserM user = getUserByEmail(userEmail); // Get user to set uploader
+        Optional<UserM> user = getUserByEmail(userEmail); // Get user to set uploader
 
         FileEntity fileEntity = new FileEntity();
         fileEntity.setName(StringUtils.cleanPath(file.getOriginalFilename()));
         fileEntity.setContentType(file.getContentType());
         fileEntity.setData(file.getBytes());
         fileEntity.setSize(file.getSize());
-        fileEntity.setUploader(user);
+        fileEntity.setUploader(user.get());
         fileDao.save(fileEntity);
     }
 
@@ -60,12 +61,12 @@ public class FileServiceImpl implements FileService{
     @Transactional // Added to handle bigger LOB streams
     public HashMap<String, List> getFileList(String userEmail) {
 
-        UserM user = getUserByEmail(userEmail);
+        Optional<UserM> user = getUserByEmail(userEmail);
 
         HashMap<String, List> files = new HashMap<>();
         List<FileEntity> file = new ArrayList<>();
 
-        fileDao.findFileEntitiesByUploader(user).forEach(f -> {
+        fileDao.findFileEntitiesByUploader(user.get()).forEach(f -> {
             FileEntity fileEntity = new FileEntity();
             fileEntity.setName(f.getName());
             fileEntity.setContentType(f.getContentType());
@@ -76,5 +77,18 @@ public class FileServiceImpl implements FileService{
         files.put("files", file);
 
         return files;
+    }
+
+    @Override
+    public Boolean deleteFile(Long id) {
+        Optional<FileEntity> fileEntity = fileDao.findById(id);
+
+        if(fileEntity.isPresent()) {
+            fileDao.delete(fileEntity.get());
+        } else {
+            throw new EntityNotFoundException("Entity not found");
+        }
+
+        return true;
     }
 }

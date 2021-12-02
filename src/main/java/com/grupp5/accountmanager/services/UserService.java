@@ -11,8 +11,8 @@ public interface UserService {
     UserM getUserById(Long id);
 
     UserM createUser(UserM userM);
-    UserM addOrUpdateUser(UserM userM);
-    UserM deleteUser(int id) throws Exception;
+    UserM updateUser(Long id,UserM userM);
+    UserM deleteUser(Long id);
 
 
 
