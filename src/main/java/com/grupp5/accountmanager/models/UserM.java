@@ -67,4 +67,15 @@ public class UserM {
     public void setUserImageUrl(String userImageUrl) {
         this.userImageUrl = userImageUrl;
     }
+
+    @Override
+    public String toString() {
+        return "UserM{" +
+                "Id=" + Id +
+                ", userName='" + userName + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", userImageUrl='" + userImageUrl + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                '}';
+    }
 }

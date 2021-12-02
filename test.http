@@ -1,0 +1,15 @@
+GET https://localhost:443/api/user/getAll
+Accept: application/json
+
+###
+
+POST https://localhost:443/api/user/create
+Content-Type: application/json
+
+{
+  "userName": "test",
+  "userEmail": "test@sti.com",
+  "hashedPassword": "test"
+}
+
+###
