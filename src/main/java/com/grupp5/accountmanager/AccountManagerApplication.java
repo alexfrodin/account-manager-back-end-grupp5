@@ -11,4 +11,5 @@ public class AccountManagerApplication {
         SpringApplication.run(AccountManagerApplication.class, args);
     }
 
+
 }

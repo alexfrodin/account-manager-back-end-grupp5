@@ -42,9 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/auth");
 
         http.csrf().disable();
+
+
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/api/auth/**").permitAll().and().cors(); // Cors for login endpoint
         http.authorizeRequests().antMatchers("/api/user/create").permitAll();
+        http.authorizeRequests().antMatchers("/ws-chat/**").permitAll();
         http.authorizeRequests().antMatchers("/api/user/**").hasAnyAuthority("admin");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
