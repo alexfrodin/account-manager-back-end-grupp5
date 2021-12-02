@@ -18,17 +18,15 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic");
-        registry.setApplicationDestinationPrefixes("/app");
+        //registry.setApplicationDestinationPrefixes("/");
 
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
         RequestUpgradeStrategy upgradeStrategy = new TomcatRequestUpgradeStrategy();
-        stompEndpointRegistry.addEndpoint("/ws-chat"); //.withSockJS();
-        stompEndpointRegistry.addEndpoint("/ws-chat")
-                .setHandshakeHandler(new DefaultHandshakeHandler(upgradeStrategy))
-                .setAllowedOrigins("http://localhost:3000/*");
+        stompEndpointRegistry.addEndpoint("/ws-chat").setAllowedOriginPatterns("*").withSockJS();
+
     }
 
 }
