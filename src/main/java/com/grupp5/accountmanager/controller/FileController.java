@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.persistence.EntityNotFoundException;
 import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -74,7 +75,15 @@ public class FileController {
         //     }
         // };
 
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFile(@PathVariable Long id) {
+        Boolean isDeleted = fileService.deleteFile(id);
+        if(!isDeleted) {
+            throw new EntityNotFoundException("No entity found");
+        }
+        return ResponseEntity.ok().body("File deleted");
     }
 
 }

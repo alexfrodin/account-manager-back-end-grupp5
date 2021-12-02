@@ -12,4 +12,5 @@ public interface FileService {
     void save(MultipartFile file, String userEmail) throws IOException;
     Optional<FileEntity> getFile(Long id, String userEmail);
     HashMap<String, List> getFileList(String userEmail);
+    Boolean deleteFile(Long id);
 }

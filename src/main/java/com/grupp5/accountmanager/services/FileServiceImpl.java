@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -76,5 +77,18 @@ public class FileServiceImpl implements FileService{
         files.put("files", file);
 
         return files;
+    }
+
+    @Override
+    public Boolean deleteFile(Long id) {
+        Optional<FileEntity> fileEntity = fileDao.findById(id);
+
+        if(fileEntity.isPresent()) {
+            fileDao.delete(fileEntity.get());
+        } else {
+            throw new EntityNotFoundException("Entity not found");
+        }
+
+        return true;
     }
 }
