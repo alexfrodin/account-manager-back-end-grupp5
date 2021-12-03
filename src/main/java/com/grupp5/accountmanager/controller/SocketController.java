@@ -20,7 +20,7 @@ public class SocketController {
     public MessageBean sendToAll(MessageBean message) throws Exception{
 
         try{
-        logger.log(Level.WARNING, message.getMessage());
+        logger.log(Level.FINE, message.getMessage());
         } catch (Exception e){
             e.printStackTrace();
         }

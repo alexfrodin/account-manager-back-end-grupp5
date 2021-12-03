@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,13 +31,11 @@ public class UserController {
         return new ResponseEntity<>(userM,HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/user/create")
     public ResponseEntity<UserM> createUser(@RequestBody UserM user) {
         UserM createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
-
 
     @GetMapping("/api/user/getAll")
     public ResponseEntity<List<UserM>> getAllUsers() {
@@ -50,6 +47,7 @@ public class UserController {
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
     @DeleteMapping("/api/user/delete/{id}")
     public ResponseEntity<UserM> deleteUserById(@PathVariable Long id){
       UserM userM = userService.deleteUser(id);
